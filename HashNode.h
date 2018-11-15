@@ -8,7 +8,7 @@ class HashNode
 {
   unsigned long key;   // The hash node's key
   unsigned long value; // The key's associated data
-  HashNode* next; // source: cs.rmit.edu.au
+  HashNode* next;
 
 public:
 
@@ -40,6 +40,7 @@ public:
   	{
   		this->key = key;
   		this->value = value;
+		this->next = NULL;
   	}
 
 };

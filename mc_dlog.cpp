@@ -15,7 +15,7 @@
 ulint random(int min, int max) // random number generator
 {
    srand((ulint)time(0)); // seeding the RNG
-   return (rand()*rand()) % (min+max-1); // returning the random number within the range
+   return rand() % (min+max-1); // returning the random number within the range
 }
 
 ulint orderOfG(ulint g, ulint n) // function to calculate the Order of g
@@ -25,7 +25,7 @@ ulint orderOfG(ulint g, ulint n) // function to calculate the Order of g
 
     for(ulint i = sqrtn ; i>=1; i--)
         {
-            ulint r = random(0, n-1);
+            ulint r = random(0, n);
             ulint y = pow(g, r);
             y = y % n;
 
@@ -52,9 +52,9 @@ ulint mc_dlog(ulint g, ulint a, ulint n) // finding the discrete algorithm
 
     for(ulint i = sqrtn ; i>=1; i--)
         {
-            ulint r = random(0, n-1);
-            ulint y = (ulint) (a * pow(g, r));
-            y = y % n;
+            ulint r = random(0, n);
+            ulint y = (ulint) (pow(g, r));
+            y = a * y % n;
 
             if(B.getValue(y))
             {
@@ -62,7 +62,7 @@ ulint mc_dlog(ulint g, ulint a, ulint n) // finding the discrete algorithm
             }
             else A.insert(y,r);
 
-            r = random (0, n-1);
+            r = random (0, n);
             y = (ulint)pow(g,r);
             y = y % n;
 
@@ -97,12 +97,15 @@ int main (int argc, char *argv[]) // main function with command line arguments
     ulint order = orderOfG(g, n);
     ulint temp = mc_dlog(g, a, n);
 
-    ulint x = order % temp; // calculating the solution 'x'
+    long int x = order % temp; // calculating the solution 'x'
 
-    if (x<0)
-        x = order + x; // changing x if negative
-
+    if (x < 0)
+   		x = order + x; // changing x if negative
+    
     cout<<x<<endl; // printing the solution
+    
+
+  
 
     return 0;
 }

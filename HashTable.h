@@ -67,6 +67,7 @@ public:
   void insert(ulint key, ulint value) // insert data associated with key into table
   {
     HashNode temp(key, value); // creating a new node with the key and the value
+  
     size_t oldSize = size(); // creating variable to store the size of the table
 
     if(num/oldSize>0.9) // checking if the hash table is densely populated

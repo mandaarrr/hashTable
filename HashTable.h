@@ -1,3 +1,8 @@
+/*
+* Name: Mandar Tamhane
+* Matric Number: 170021792
+*/
+
 #ifndef MY_HASH_TABLE
 #define MY_HASH_TABLE
 

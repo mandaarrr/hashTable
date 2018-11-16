@@ -20,69 +20,100 @@ class HashTable
 
 public:
 
-  HashTable()       // constructor, initializes table of size 1;
+  HashTable()       // constructor, initializes table of size 11;
   {
-    table = new Table();
-    this->num = 11;
-    table->resize(num);
+    table = new Table(11);
+    this->num = 0;
   }
 
   HashTable(size_t temp) // constructor, requires size of table as arg
   {
-    this->num = temp;
-    table = new Table(num);
-    table->resize(num);
+    table = new Table(temp);
+    this->num = 0;
   }
 
-  ~HashTable() // deconstructor
+  ~HashTable() // destructor
   {
   }
 
   size_t size() // returns size of the hash table (number of buckets)
   {
-    return num;
+    return table->size();
   }
 
   size_t hash_function(ulint key) // the table's hash function
   {
-     size_t index = key % size();
-     return index;
+     return key % size();
   }
 
-  ulint getValue(ulint data) // find and return data associated with key
+  ulint getValue(ulint key) // find and return data associated with key
   {
-    ulint hashData = hash_function(data);
-    list<HashNode>::iterator it;
+    ulint hashData = hash_function(key);
+    
+    list<HashNode>::iterator iterator1; // defining an iterator to parse through
 
-    for (it = table->at(hashData).begin(); it != table->at(hashData).end(); it++)
+    for (iterator1 = table->at(hashData).begin(); iterator1 != table->at(hashData).end(); iterator1++)
+      if (iterator1->getKey() == key) // check if the key required exists in the hash table
+        return iterator1->getValue();
+
+    return HashTableError(1); // KEY_NOT_FOUND
+  }
+
+  void insert(ulint key, ulint value) // insert data associated with key into table
+  {
+    HashNode temp(key, value); // creating a new node with the key and the value
+    size_t oldSize = size(); // creating variable to store the size of the table
+
+    if(num/oldSize>0.9) // checking if the hash table is densely populated
     {
-      if (it->getKey() == data)
-      {
-        return it->getValue();
-      }
+      size_t newSize = oldSize*2; // creating a new size for the hash table
+      table->resize(newSize); // resizing the old table to the new size
+      rehash(newSize); // rehashing the old elements into the table
     }
+    
+    table->at(hash_function(key)).push_back(temp); // adding the element to the hash table
 
-    return HashTableError(1);
+    num++; // incrementing num pointer
   }
 
-  void insert(ulint key, ulint value)// insert data associated with key into table
+
+  void erase(ulint key)  // remove key and associated data from table
   {
-    HashNode temp(key, value);
-    table->at(hash_function(key)).push_back(temp);
+    ulint temp = hash_function(key);
+    list<HashNode>::iterator iterator2; // iterator to iterate through the list
+  
+    for (iterator2 = table->at(temp).begin(); iterator2 != table->at(temp).end(); iterator2++)
+      if (iterator2->getKey() == key) // check if the key exists
+        table->at(temp).erase(iterator2); // erase the key
+    
+    num--;
   }
 
+  void rehash(size_t newSize) // sets a new size for the hash table, rehashes the hash table 
+  {
+    list<HashNode> tempList;
+    list<HashNode>::iterator iterator3;
+    ulint oldSize = size();
 
-  void erase(ulint);        // remove key and associated data from table
+    /*
+    * Loop to transfer the contents of the table to a temporary table
+    */
+    for(int i=0; i<oldSize; i++)
+      for (iterator3 = table->at(i).begin(); iterator3 != table->at(i).end(); iterator3++)
+       {
+        HashNode newNode (iterator3->getKey(), iterator3->getValue());
+        tempList.push_back(newNode);
+       }
 
-  void rehash(size_t); // sets a new size for the hash table, rehashes the hash table 
+    delete table; // deleting the old table
+    table = new Table(newSize); // creating a new table with the new size
 
-  // extend if necessary
+    for (iterator3 = tempList.begin(); iterator3 != tempList.end(); iterator3++) // loop to move all the elements back to the table with the new size
+    {
+      insert(iterator3->getKey(), iterator3->getValue());
+    }
+  }
+
 };
-
-/* Implement the 
-- Constructors, Destructor
-- hash_function, insert, getValue methods
-- erase, and rehash methods 
-*/
 
 #endif

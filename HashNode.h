@@ -8,11 +8,11 @@ class HashNode
 {
   unsigned long key;   // The hash node's key
   unsigned long value; // The key's associated data
-  HashNode* next;
+  HashNode* next; // The pointer to the next node
 
 public:
 
-	HashNode()
+	HashNode() // Default Constructor
 	{
 		this->key = 0;
 		this->value = 0;
@@ -26,17 +26,17 @@ public:
 		this->next = NULL;
 	}
 
-	unsigned long getKey()
+	unsigned long getKey() // Return the key of the node
 	{
   		return key;
   	}
 
-  	unsigned long getValue()
+  	unsigned long getValue() // Return the value of the node
   	{
   		return value;
   	}
 
-  	void assign(unsigned long key, unsigned long value)
+  	void assign(unsigned long key, unsigned long value) // Assign the key and value to the node
   	{
   		this->key = key;
   		this->value = value;

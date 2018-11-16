@@ -1,8 +1,7 @@
 /*
 * Name: Mandar Tamhane
-* Matric Number: 170021792
+* Matriculation Number: 170021792
 */
-
 
 #ifndef MY_HASH_NODE
 #define MY_HASH_NODE

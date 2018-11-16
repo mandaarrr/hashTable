@@ -1,6 +1,6 @@
 /*
 * Name: Mandar Tamhane
-* Matric Number: 170021792
+* Matriculation Number: 170021792
 */
 
 #ifndef MY_HASH_TABLE
@@ -46,9 +46,9 @@ public:
     return table->size();
   }
 
-  size_t hash_function(ulint key) // the table's hash function
+  size_t hash_function(ulint key) // the table's hash function - Knuth Variant on Division (Source: https://www.cs.hmc.edu/~geoff/classes/hmc.cs070.200101/homework10/hashfuncs.html)
   {
-     return key % size();
+      return key*(key+3) % size();
   }
 
   ulint getValue(ulint key) // find and return data associated with key
@@ -103,7 +103,7 @@ public:
     /*
     * Loop to transfer the contents of the table to a temporary table
     */
-    for(int i=0; i<oldSize; i++)
+    for(ulint i=0; i<oldSize; i++)
       for (iterator3 = table->at(i).begin(); iterator3 != table->at(i).end(); iterator3++)
        {
         HashNode newNode (iterator3->getKey(), iterator3->getValue());
